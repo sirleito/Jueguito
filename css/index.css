@@ -43,3 +43,21 @@ body{
 	width: 45%;
 	margin-left: 5%
 }
+.especial{
+	max-height: 25px;
+	display: flex;
+	flex-wrap: wrap;
+}
+.rabia{
+	width: 25px;
+	height: 25px;
+	background-color: #f44336;
+	border: solid 1px #ef5350;
+}
+.div div img{
+	max-height: 300px;
+}
+.boton{
+	font-size: 24px;
+	margin-top: 10px;
+}
