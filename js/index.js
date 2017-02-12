@@ -30,11 +30,11 @@ document.addEventListener('DOMContentLoaded',function(){
 	  	var segundoId = this.nombre + "2";
 	  	var tercerId = this.nombre + "3";
 	  	var cuartoId = this.nombre + "4";
-
 	  	var vidaValor = this.vida;
 	  	div2.appendChild(this.imagen);
 	  	div2.innerHTML = div2.innerHTML + "<p id=" + segundoId +">Vida:" + vidaValor + "</p><p>Especial</p><div class='especial' id="+ tercerId + "></div><button value=" + this.nombre + " class='boton'>¡Atacar!</button>"
-	  	
+	  	datos.push(this.vida);
+	  	datos.push(this.fuerza);
 	  	for (var i = rabia; i > 0; i--) {
 	  		var rabiaId = document.getElementById(tercerId);
 	  		rabiaId.innerHTML = rabiaId.innerHTML + "<div class='rabia'></div>";
@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded',function(){
 	malos.push(new heroes("Alien", 20, 600, "img/alien.png", "Poder", 5));
 	malos.push(new heroes("Bruja", 30, 1000, "img/bruja.png", "Poder", 4));
 
+	var datos = [];
+
 
 	var start = document.getElementById("start");
 	start.onclick = function() {
@@ -68,12 +70,13 @@ document.addEventListener('DOMContentLoaded',function(){
 var gladiador;
 var guerrero;
 var asesina;
-var heroeElegido
+var heroeElegido;
+var contadorMalos = 0;
 	function eleccion(){
 		function seleccion(e){
 			div.innerHTML = ""
 			e.combate()
-			malos[0].combate()
+			malos[contadorMalos].combate()
 			ataque();
 			heroeElegido = e;
 		};
@@ -87,19 +90,33 @@ var heroeElegido
 			seleccion(personajes[2])
 		};
 	}
-	
+
 	function ataque(){
 		var perBueno = document.getElementsByClassName("boton")[0];
 		var perMalo = document.getElementsByClassName("boton")[1];
-
+		var nombreMalo = perMalo.value;
+		var vidaMaloId = nombreMalo + "2";
+		var vidaMalo = document.getElementById(vidaMaloId);
+		var nombreBueno = perBueno.value;
+		var vidaBuenoId = nombreBueno + "2";
+		var vidaBueno = document.getElementById(vidaBuenoId);
 		perBueno.onclick = function(){
-			var nombreBueno = perBueno.nombre;
-			var vidaBueno = nombreBueno + "2"
+			datos[2] = datos[2] - datos[1];
+			vidaMalo.innerHTML = "Vida: " + datos[2];
+			datos[0] = datos[0] - datos[3];
+			vidaBueno.innerHTML = "Vida: " + datos[0];
+			if (datos[0] <= "0") {
+				div.innerHTML = "<h2 class='resultado'>¡Perdiste, idiota!</h2>"
+			}if (datos[2] <= "0") {
+				div.innerHTML = "<h2 class='resultado'>¡Enemigo derrotado!</h2><button id='continuar' class='continuar'>Continuar con la masacre</button>"
+				contadorMalos ++
+				console.log(contadorMalos)
+				var continuar = document.getElementById("continuar");
+				continuar.onclick = eleccion();
+			};
 
-			console.log(vidaBueno.innerHTML)
 		};
-		perMalo.onclick = function(){
-		};
+		
 	};
 });
 
