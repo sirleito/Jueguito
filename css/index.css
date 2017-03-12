@@ -16,6 +16,7 @@ body{
 	font-size: 38px;
 	font-weight: 800;
 	background-color: #f44336;
+	border-color: #f44336;
 }
 .div{
 	width: 100%;
@@ -74,4 +75,13 @@ body{
 .continuar{
 	font-size: 26px;
 	margin-bottom: 20%;
+	background-color: #f44336;
+	border-color: #f44336;
+}
+.none{
+	visibility: hidden!important;
+}
+.puto{
+	font-size: 75px;
+	color: #f44336
 }

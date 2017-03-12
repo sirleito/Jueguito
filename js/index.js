@@ -10,9 +10,6 @@ document.addEventListener('DOMContentLoaded',function(){
 			this.especial = e
 			this.rabia = r
 		}
-		hablar(){
-			alert(this.nombre)
-		}
 		mostrar(){
 	  	var identificador = this.nombre
 	  	div.innerHTML = div.innerHTML + '<div id=' + identificador + ' class="personaje"></div>'
@@ -39,10 +36,11 @@ document.addEventListener('DOMContentLoaded',function(){
 	  		var rabiaId = document.getElementById(tercerId);
 	  		rabiaId.innerHTML = rabiaId.innerHTML + "<div class='rabia'></div>";
 	  	};
-	  	
-	
 	  };
 	};
+
+	//Los personajes*//
+
 	var div = document.getElementById('div');
 	var clasePersonajes = document.getElementsByClassName("personaje")
 	
@@ -58,20 +56,30 @@ document.addEventListener('DOMContentLoaded',function(){
 
 	var datos = [];
 
+//Comienzo
 
-	var start = document.getElementById("start");
-	start.onclick = function() {
+	function funcStart() {
 		start.style.display = "none"
 		for(var p of personajes){
 			p.mostrar()	
 		}
 		eleccion();
 	}
-var gladiador;
-var guerrero;
-var asesina;
-var heroeElegido;
-var contadorMalos = 0;
+
+	var start = document.getElementById("start");
+
+	start.onclick = function(){
+		funcStart()
+	}
+
+//Eleccion de los personajes
+
+	var gladiador;
+	var guerrero;
+	var asesina;
+	var heroeElegido;
+	var contadorMalos = 0;
+
 	function eleccion(){
 		function seleccion(e){
 			div.innerHTML = ""
@@ -91,6 +99,8 @@ var contadorMalos = 0;
 		};
 	}
 
+//Ataques de los personajes
+
 	function ataque(){
 		var perBueno = document.getElementsByClassName("boton")[0];
 		var perMalo = document.getElementsByClassName("boton")[1];
@@ -100,23 +110,43 @@ var contadorMalos = 0;
 		var nombreBueno = perBueno.value;
 		var vidaBuenoId = nombreBueno + "2";
 		var vidaBueno = document.getElementById(vidaBuenoId);
+		perMalo.className += " none"
 		perBueno.onclick = function(){
 			datos[2] = datos[2] - datos[1];
 			vidaMalo.innerHTML = "Vida: " + datos[2];
 			datos[0] = datos[0] - datos[3];
 			vidaBueno.innerHTML = "Vida: " + datos[0];
+			victoriaDerrota();
+		};
+	};
+
+		//Cuando ya termino la batalla*//
+
+
+	function victoriaDerrota(){
+
+
 			if (datos[0] <= "0") {
 				div.innerHTML = "<h2 class='resultado'>¡Perdiste, idiota!</h2>"
-			}if (datos[2] <= "0") {
+			}
+			if (datos[2] <= "0" && contadorMalos <= 2) {
 				div.innerHTML = "<h2 class='resultado'>¡Enemigo derrotado!</h2><button id='continuar' class='continuar'>Continuar con la masacre</button>"
-				contadorMalos ++
-				console.log(contadorMalos)
-				var continuar = document.getElementById("continuar");
-				continuar.onclick = eleccion();
-			};
+		 		contadorMalos ++
 
-		};
-		
+				var continuar = document.getElementById("continuar");
+				continuar.onclick = function(){
+
+					div.innerHTML = ""
+					datos = []
+					heroeElegido.combate();
+					malos[contadorMalos].combate();
+					ataque();	
+				} 
+			if (datos[2] <= "0" && contadorMalos == 3){
+				div.innerHTML = "<h1 class='puto'>Sos el puto amo</h1>"
+				}
+
+			};
 	};
 });
 
