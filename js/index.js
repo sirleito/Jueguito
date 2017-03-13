@@ -27,14 +27,17 @@ document.addEventListener('DOMContentLoaded',function(){
 	  	var segundoId = this.nombre + "2";
 	  	var tercerId = this.nombre + "3";
 	  	var cuartoId = this.nombre + "4";
+	  	var quintoId = this.nombre + "5";
 	  	var vidaValor = this.vida;
 	  	div2.appendChild(this.imagen);
 	  	div2.innerHTML = div2.innerHTML + "<p id=" + segundoId +">Vida:" + vidaValor + "</p><p>Especial</p><div class='especial' id="+ tercerId + "></div><button value=" + this.nombre + " class='boton'>¡Atacar!</button>"
 	  	datos.push(this.vida);
 	  	datos.push(this.fuerza);
+	  	datos.push(this.rabia);
+	  	datos.push(this.especial)
 	  	for (var i = rabia; i > 0; i--) {
 	  		var rabiaId = document.getElementById(tercerId);
-	  		rabiaId.innerHTML = rabiaId.innerHTML + "<div class='rabia'></div>";
+	  		rabiaId.innerHTML = rabiaId.innerHTML + "<div class='rabia " + quintoId + "'></div>";
 	  	};
 	  };
 	};
@@ -55,6 +58,7 @@ document.addEventListener('DOMContentLoaded',function(){
 	malos.push(new heroes("Bruja", 30, 1000, "img/bruja.png", "Poder", 4));
 
 	var datos = [];
+
 
 //Comienzo
 
@@ -86,7 +90,10 @@ document.addEventListener('DOMContentLoaded',function(){
 			e.combate()
 			malos[contadorMalos].combate()
 			ataque();
+			maloElegido = malos[contadorMalos]
+			maloRabia = maloElegido.nombre + "5"
 			heroeElegido = e;
+			heroeRabia = e.nombre + "5"
 		};
 		gladiador.onclick = function(){
 			seleccion(personajes[0])
@@ -101,6 +108,11 @@ document.addEventListener('DOMContentLoaded',function(){
 
 //Ataques de los personajes
 
+	var heroeRabia;
+	var contadorRabia = 0;
+	var contadorRabiaMala = 0;
+	
+
 	function ataque(){
 		var perBueno = document.getElementsByClassName("boton")[0];
 		var perMalo = document.getElementsByClassName("boton")[1];
@@ -111,12 +123,39 @@ document.addEventListener('DOMContentLoaded',function(){
 		var vidaBuenoId = nombreBueno + "2";
 		var vidaBueno = document.getElementById(vidaBuenoId);
 		perMalo.className += " none"
+
 		perBueno.onclick = function(){
-			datos[2] = datos[2] - datos[1];
-			vidaMalo.innerHTML = "Vida: " + datos[2];
-			datos[0] = datos[0] - datos[3];
-			vidaBueno.innerHTML = "Vida: " + datos[0];
-			victoriaDerrota();
+			var cantRabia = document.getElementsByClassName(heroeRabia).length
+			var rabiaHeroe = document.getElementsByClassName(heroeRabia)[contadorRabia]
+			var cantRabiaMala = document.getElementsByClassName(maloRabia).length
+			var rabiaMala = document.getElementsByClassName(maloRabia)[contadorRabiaMala]
+			var vidaTotalBueno = vidaBueno.innerHTML
+			var vidaTotalMalo = vidaMalo.innerHTML
+			rabiaTodos(cantRabia, contadorRabia, rabiaHeroe, datos[4], datos[1], heroeRabia, vidaTotalMalo);
+			rabiaTodos(cantRabiaMala, contadorRabiaMala, rabiaMala, datos[0], datos[5], maloRabia, vidaTotalBueno);
+
+			function rabiaTodos(a, b, c, d, e, f, g){
+				if (a > b){
+					c.style.background = "green"
+					b ++
+					d = d - e;
+				}else{
+					dañoRabia = e * 2
+
+					alert("¡Ataaque especial! " + datos[3] + " daño: " + dañoRabia)
+					b = 0
+					d = d - dañoRabia
+
+					for (var i = 0; i < a; i++) {
+						var rabiaRoja = document.getElementsByClassName(f)[i]
+						rabiaRoja.style.background = "#f44336"
+					}
+				}
+				g = "Vida: " + d;
+				g = "Vida: " + d;
+				victoriaDerrota();
+			}
+			
 		};
 	};
 
@@ -129,10 +168,10 @@ document.addEventListener('DOMContentLoaded',function(){
 			if (datos[0] <= "0") {
 				div.innerHTML = "<h2 class='resultado'>¡Perdiste, idiota!</h2>"
 			}
-			if (datos[2] <= "0" && contadorMalos <= 2) {
+			if (datos[4] <= "0" && contadorMalos <= 2) {
 				div.innerHTML = "<h2 class='resultado'>¡Enemigo derrotado!</h2><button id='continuar' class='continuar'>Continuar con la masacre</button>"
 		 		contadorMalos ++
-
+		 		contadorRabia = 0
 				var continuar = document.getElementById("continuar");
 				continuar.onclick = function(){
 
@@ -142,7 +181,7 @@ document.addEventListener('DOMContentLoaded',function(){
 					malos[contadorMalos].combate();
 					ataque();	
 				} 
-			if (datos[2] <= "0" && contadorMalos == 3){
+			if (datos[4] <= "0" && contadorMalos == 3){
 				div.innerHTML = "<h1 class='puto'>Sos el puto amo</h1>"
 				}
 
