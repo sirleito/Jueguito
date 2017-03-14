@@ -83,7 +83,8 @@ document.addEventListener('DOMContentLoaded',function(){
 	var asesina;
 	var heroeElegido;
 	var contadorMalos = 0;
-
+	var divMalo;
+	var divBueno
 	function eleccion(){
 		function seleccion(e){
 			div.innerHTML = ""
@@ -94,6 +95,8 @@ document.addEventListener('DOMContentLoaded',function(){
 			maloRabia = maloElegido.nombre + "5"
 			heroeElegido = e;
 			heroeRabia = e.nombre + "5"
+			divMalo = document.getElementById(maloElegido.nombre)
+			divBueno = document.getElementById(heroeElegido.nombre)
 		};
 		gladiador.onclick = function(){
 			seleccion(personajes[0])
@@ -108,6 +111,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
 //Ataques de los personajes
 
+	var maloRabia;
 	var heroeRabia;
 	var contadorRabia = 0;
 	var contadorRabiaMala = 0;
@@ -129,32 +133,65 @@ document.addEventListener('DOMContentLoaded',function(){
 			var rabiaHeroe = document.getElementsByClassName(heroeRabia)[contadorRabia]
 			var cantRabiaMala = document.getElementsByClassName(maloRabia).length
 			var rabiaMala = document.getElementsByClassName(maloRabia)[contadorRabiaMala]
-			var vidaTotalBueno = vidaBueno.innerHTML
-			var vidaTotalMalo = vidaMalo.innerHTML
-			rabiaTodos(cantRabia, contadorRabia, rabiaHeroe, datos[4], datos[1], heroeRabia, vidaTotalMalo);
-			rabiaTodos(cantRabiaMala, contadorRabiaMala, rabiaMala, datos[0], datos[5], maloRabia, vidaTotalBueno);
-
-			function rabiaTodos(a, b, c, d, e, f, g){
-				if (a > b){
-					c.style.background = "green"
-					b ++
-					d = d - e;
+			rabiaBueno();
+			setTimeout(function(){
+				rabiaMalo();
+			}, 200)
+			
+			//rabiaTodos(cantRabiaMala, contadorRabiaMala, rabiaMala, datos[0], datos[5], maloRabia, vidaTotalBueno);
+			
+			
+			function rabiaBueno(){
+				if ( cantRabia > contadorRabia){
+					rabiaHeroe.style.background = "green"
+					contadorRabia ++
+					datos[4] = datos[4] - datos[1];
 				}else{
-					dañoRabia = e * 2
+					dañoRabia = datos[1] * 2
 
-					alert("¡Ataaque especial! " + datos[3] + " daño: " + dañoRabia)
-					b = 0
-					d = d - dañoRabia
+					alert("¡Ataque especial de tu personaje! " + datos[3] + " daño: " + dañoRabia)
+					contadorRabia = 0
+					datos[4] = datos[4] - dañoRabia
 
-					for (var i = 0; i < a; i++) {
-						var rabiaRoja = document.getElementsByClassName(f)[i]
+					for (var i = 0; i < cantRabia; i++) {
+						var rabiaRoja = document.getElementsByClassName(heroeRabia)[i]
 						rabiaRoja.style.background = "#f44336"
 					}
-				}
-				g = "Vida: " + d;
-				g = "Vida: " + d;
-				victoriaDerrota();
+				};
+				vidaMalo.innerHTML = "Vida: " + datos[4];
+				divMalo.style.background = "#f44336"
+				setTimeout(function(){
+					divMalo.style.background = ""
+				}, 300)
+				
 			}
+
+			function rabiaMalo(){
+				if ( cantRabiaMala > contadorRabiaMala){
+					rabiaMala.style.background = "green"
+					contadorRabiaMala ++
+					datos[0] = datos[0] - datos[5];
+				}else{
+					dañoRabiaMala = datos[5] * 2
+
+					alert("¡Ataque especial de tu enemigo! " + datos[7] + " daño: " + dañoRabiaMala)
+					contadorRabiaMala = 0
+					datos[0] = datos[0] - dañoRabiaMala
+
+					for (var i = 0; i < cantRabiaMala; i++) {
+						var rabiaRojaMala = document.getElementsByClassName(maloRabia)[i]
+						rabiaRojaMala.style.background = "#f44336"
+					}
+				};
+				vidaBueno.innerHTML = "Vida: " + datos[0];
+				divBueno.style.background = "#f44336"
+				setTimeout(function(){
+					divBueno.style.background = ""
+				}, 200)
+				
+			}
+			victoriaDerrota();
+
 			
 		};
 	};
@@ -172,6 +209,7 @@ document.addEventListener('DOMContentLoaded',function(){
 				div.innerHTML = "<h2 class='resultado'>¡Enemigo derrotado!</h2><button id='continuar' class='continuar'>Continuar con la masacre</button>"
 		 		contadorMalos ++
 		 		contadorRabia = 0
+		 		contadorRabiaMala = 0
 				var continuar = document.getElementById("continuar");
 				continuar.onclick = function(){
 
