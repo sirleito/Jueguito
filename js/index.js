@@ -85,19 +85,28 @@ document.addEventListener('DOMContentLoaded',function(){
 	var contadorMalos = 0;
 	var divMalo;
 	var divBueno
-	function eleccion(){
-		function seleccion(e){
+	var maloElegido
+	var maloRabia
+
+	function seleccionMalo(){
+
+		malos[contadorMalos].combate()			
+		maloElegido = malos[contadorMalos]
+		maloRabia = maloElegido.nombre + "5"
+		divMalo = document.getElementById(maloElegido.nombre)
+	}
+	function seleccion(e){
+
 			div.innerHTML = ""
 			e.combate()
-			malos[contadorMalos].combate()
-			ataque();
-			maloElegido = malos[contadorMalos]
-			maloRabia = maloElegido.nombre + "5"
 			heroeElegido = e;
 			heroeRabia = e.nombre + "5"
-			divMalo = document.getElementById(maloElegido.nombre)
 			divBueno = document.getElementById(heroeElegido.nombre)
+			seleccionMalo()
+			ataque();
 		};
+	function eleccion(){
+		
 		gladiador.onclick = function(){
 			seleccion(personajes[0])
 		};
@@ -115,7 +124,7 @@ document.addEventListener('DOMContentLoaded',function(){
 	var heroeRabia;
 	var contadorRabia = 0;
 	var contadorRabiaMala = 0;
-	
+	var rabiaMala
 
 	function ataque(){
 		var perBueno = document.getElementsByClassName("boton")[0];
@@ -133,17 +142,28 @@ document.addEventListener('DOMContentLoaded',function(){
 			var rabiaHeroe = document.getElementsByClassName(heroeRabia)[contadorRabia]
 			var cantRabiaMala = document.getElementsByClassName(maloRabia).length
 			var rabiaMala = document.getElementsByClassName(maloRabia)[contadorRabiaMala]
+			
+			
 			rabiaBueno();
-			setTimeout(function(){
-				rabiaMalo();
-			}, 200)
-			
-			//rabiaTodos(cantRabiaMala, contadorRabiaMala, rabiaMala, datos[0], datos[5], maloRabia, vidaTotalBueno);
-			
+			rabiaMalo();
+
+			setTimeout(function(){fondoRojo(divMalo)}, 200)
+			setTimeout(function(){fondoRojo(document.getElementById(heroeElegido.nombre))}, 400)
+
+			function fondoRojo(a){
+					a.className = "fondoRojo"
+					setTimeout(function(){
+					a.className = ""
+				}, 200)
+
+			};
+				
+				//funcion para el funcionamiento de la rabia
 			
 			function rabiaBueno(){
 				if ( cantRabia > contadorRabia){
 					rabiaHeroe.style.background = "green"
+					rabiaHeroe.style.border = "solid 1px green"
 					contadorRabia ++
 					datos[4] = datos[4] - datos[1];
 				}else{
@@ -156,19 +176,23 @@ document.addEventListener('DOMContentLoaded',function(){
 					for (var i = 0; i < cantRabia; i++) {
 						var rabiaRoja = document.getElementsByClassName(heroeRabia)[i]
 						rabiaRoja.style.background = "#f44336"
+						rabiaRoja.style.border = "solid 1px #ef5350"
 					}
 				};
 				vidaMalo.innerHTML = "Vida: " + datos[4];
-				divMalo.style.background = "#f44336"
-				setTimeout(function(){
-					divMalo.style.background = ""
-				}, 300)
+				
+				//divMalo.style.background = "#f44336"
+				//setTimeout(function(){
+				//	divMalo.style.background = ""
+				//}, 300)
+				//console.log(divMalo)
 				
 			}
 
 			function rabiaMalo(){
 				if ( cantRabiaMala > contadorRabiaMala){
 					rabiaMala.style.background = "green"
+					rabiaMala.style.border = "solid 1px green"
 					contadorRabiaMala ++
 					datos[0] = datos[0] - datos[5];
 				}else{
@@ -179,17 +203,19 @@ document.addEventListener('DOMContentLoaded',function(){
 					datos[0] = datos[0] - dañoRabiaMala
 
 					for (var i = 0; i < cantRabiaMala; i++) {
+
 						var rabiaRojaMala = document.getElementsByClassName(maloRabia)[i]
 						rabiaRojaMala.style.background = "#f44336"
+						rabiaRojaMala.style.border = "solid 1px #ef5350"
 					}
+					
 				};
 				vidaBueno.innerHTML = "Vida: " + datos[0];
-				divBueno.style.background = "#f44336"
-				setTimeout(function(){
-					divBueno.style.background = ""
-				}, 200)
 				
 			}
+
+			
+			
 			victoriaDerrota();
 
 			
@@ -208,16 +234,17 @@ document.addEventListener('DOMContentLoaded',function(){
 			if (datos[4] <= "0" && contadorMalos <= 2) {
 				div.innerHTML = "<h2 class='resultado'>¡Enemigo derrotado!</h2><button id='continuar' class='continuar'>Continuar con la masacre</button>"
 		 		contadorMalos ++
-		 		contadorRabia = 0
-		 		contadorRabiaMala = 0
+
+		 		
 				var continuar = document.getElementById("continuar");
 				continuar.onclick = function(){
-
-					div.innerHTML = ""
-					datos = []
-					heroeElegido.combate();
-					malos[contadorMalos].combate();
-					ataque();	
+				contadorRabia = 0
+		 		contadorRabiaMala = 0
+				div.innerHTML = ""
+				datos = []
+				heroeElegido.combate();
+				seleccionMalo()
+				ataque();	
 				} 
 			if (datos[4] <= "0" && contadorMalos == 3){
 				div.innerHTML = "<h1 class='puto'>Sos el puto amo</h1>"

@@ -55,7 +55,7 @@ body{
 }
 .rabia{
 	width: 25px;
-	height: 25px;
+	height: 12px;
 	background-color: #f44336;
 	border: solid 1px #ef5350;
 }
@@ -84,4 +84,7 @@ body{
 .puto{
 	font-size: 75px;
 	color: #f44336
+}
+.fondoRojo{
+	background-color: #f44336;
 }
